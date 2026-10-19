@@ -1,12 +1,7 @@
 name: Jefit autotests
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 5 * * 1-5'   # nightly regression on weekdays (05:00 UTC)
+  # Запуск только вручную: вкладка Actions -> Jefit autotests -> Run workflow
   workflow_dispatch:
     inputs:
       filter:
