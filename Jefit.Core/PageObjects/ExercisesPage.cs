@@ -19,8 +19,8 @@ public class ExercisesPage : BasePage
     private Label FoundCounter => new(_driver, By.XPath(XPathHelper.DeepestContaining("exercises found")));
     private Link NextPageLink => new(_driver, By.XPath("//a[normalize-space()='Next']"));
 
-    private Button MuscleFilter(string muscle) => new(_driver, By.XPath(
-        $"(//h2[normalize-space()='Select by Muscle']/following::*[normalize-space()={XPathHelper.Literal(muscle)}])[1]"));
+    private static By MuscleFilterLocator(string muscle) => By.XPath(
+        $"(//h2[normalize-space()='Select by Muscle']/following::*[normalize-space()={XPathHelper.Literal(muscle)}])[1]");
 
     public static ExercisesPage Open(IWebDriver driver)
     {
@@ -40,8 +40,14 @@ public class ExercisesPage : BasePage
 
     public void FilterByMuscle(string muscle)
     {
+        var locator = MuscleFilterLocator(muscle);
         var countBefore = GetFoundExercisesCount();
-        MuscleFilter(muscle).Click();
+
+        // Страница показывается раньше, чем JavaScript сайта подключается к кнопкам.
+        // Клик до этого момента ничего не делает, поэтому ждём "оживления" кнопки.
+        WaitUntilInteractive(locator);
+
+        new Button(_driver, locator).Click();
         WaitUntil(_ => GetFoundExercisesCount() != countBefore);
     }
 
@@ -63,6 +69,18 @@ public class ExercisesPage : BasePage
     }
 
     protected override void WaitForPageLoad() => EnsureDisplayed(Heading, "База упражнений");
+
+    /// <summary>React добавляет элементу служебные свойства __react..., когда подключает к нему обработчики.</summary>
+    private void WaitUntilInteractive(By locator) =>
+        WaitUntil(d =>
+        {
+            var element = d.FindElements(locator).FirstOrDefault();
+            if (element is null) return false;
+
+            var result = ((IJavaScriptExecutor)d).ExecuteScript(
+                "return Object.keys(arguments[0]).some(k => k.startsWith('__react'));", element);
+            return Equals(result, true);
+        });
 
     private List<ExerciseCard> ReadCards()
     {
