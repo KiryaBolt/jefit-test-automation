@@ -1,0 +1,134 @@
+name: Jefit autotests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 5 * * 1-5'   # nightly regression on weekdays (05:00 UTC)
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: 'Extra NUnit filter, e.g. Category=smoke (empty = all)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  RESULTS_DIR: Jefit.Test/bin/Release/net8.0/allure-results
+  JEFIT_TestSettings__UserEmail: ${{ secrets.JEFIT_EMAIL }}
+  JEFIT_TestSettings__UserPassword: ${{ secrets.JEFIT_PASSWORD }}
+
+jobs:
+  api-tests:
+    name: API tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build
+        run: dotnet build JefitAutomation.sln -c Release
+
+      - name: Run API tests
+        run: |
+          FILTER="Category=api"
+          if [ -n "${{ inputs.filter }}" ]; then FILTER="$FILTER&${{ inputs.filter }}"; fi
+          dotnet test Jefit.Test -c Release --no-build \
+            --settings runsettings/parallel.runsettings \
+            --filter "$FILTER" --logger "trx;LogFileName=api.trx"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-api
+          path: ${{ env.RESULTS_DIR }}
+          retention-days: 7
+
+  ui-tests:
+    name: UI tests (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ chrome, firefox, edge ]   # cross-browser plan
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build
+        run: dotnet build JefitAutomation.sln -c Release
+
+      - name: Run UI tests in ${{ matrix.browser }}
+        run: |
+          FILTER="Category=ui"
+          if [ -n "${{ inputs.filter }}" ]; then FILTER="$FILTER&${{ inputs.filter }}"; fi
+          dotnet test Jefit.Test -c Release --no-build \
+            --settings runsettings/${{ matrix.browser }}.runsettings \
+            --filter "$FILTER" --logger "trx;LogFileName=ui-${{ matrix.browser }}.trx"
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-ui-${{ matrix.browser }}
+          path: ${{ env.RESULTS_DIR }}
+          retention-days: 7
+
+  allure-report:
+    name: Allure report
+    needs: [ api-tests, ui-tests ]
+    if: always()
+    runs-on: ubuntu-latest
+    concurrency:
+      group: allure-report
+      cancel-in-progress: false
+    steps:
+      - name: Download all results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          merge-multiple: true
+          path: allure-results
+
+      - name: Load report history
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Generate Allure report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+          keep_reports: 20
+
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-history
+          retention-days: 14
+
+      - name: Publish report to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
