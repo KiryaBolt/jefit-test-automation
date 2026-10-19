@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Дефекты продукта (проверка не прошла)",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(Expected|Ожидал).*"
+  },
+  {
+    "name": "Проблемы локаторов и ожиданий",
+    "matchedStatuses": ["broken", "failed"],
+    "traceRegex": ".*(NoSuchElementException|WebDriverTimeoutException|StaleElementReferenceException|не загрузилась).*"
+  },
+  {
+    "name": "Проблемы сети и окружения",
+    "matchedStatuses": ["broken"],
+    "traceRegex": ".*(HttpRequestException|TaskCanceledException|WebDriverException).*"
+  },
+  {
+    "name": "Пропущены (не настроен аккаунт)",
+    "matchedStatuses": ["skipped"]
+  }
+]

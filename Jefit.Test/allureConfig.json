@@ -1,0 +1,29 @@
+{
+  "allure": {
+    "directory": "allure-results",
+    "title": "Jefit automation report"
+  },
+  "specflow": {
+    "stepArguments": {
+      "convertToParameters": true
+    },
+    "grouping": {
+      "suites": {
+        "parentSuite": "^(ui|api)$"
+      },
+      "behaviors": {
+        "epic": "^epic:?(.+)",
+        "story": "^story:?(.+)"
+      }
+    },
+    "labels": {
+      "owner": "^owner:?(.+)",
+      "severity": "^(blocker|critical|normal|minor|trivial)$"
+    },
+    "links": {
+      "link": "^link:(.+)",
+      "issue": "^issue:(.+)",
+      "tms": "^tms:(.+)"
+    }
+  }
+}
