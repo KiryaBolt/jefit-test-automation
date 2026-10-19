@@ -52,6 +52,7 @@ public static class DriverFactory
     private static ChromeOptions GetChromeOptions(TestSettings settings, bool headless)
     {
         var options = new ChromeOptions();
+        options.PageLoadStrategy = PageLoadStrategy.Eager;
         AddChromiumArguments(options.AddArgument, settings, headless);
 
         if (!string.IsNullOrWhiteSpace(settings.ChromeBinaryPath))
@@ -65,6 +66,7 @@ public static class DriverFactory
     private static EdgeOptions GetEdgeOptions(TestSettings settings, bool headless)
     {
         var options = new EdgeOptions();
+        options.PageLoadStrategy = PageLoadStrategy.Eager;
         AddChromiumArguments(options.AddArgument, settings, headless);
         return options;
     }
@@ -88,6 +90,7 @@ public static class DriverFactory
     private static FirefoxOptions GetFirefoxOptions(TestSettings settings, bool headless)
     {
         var options = new FirefoxOptions();
+        options.PageLoadStrategy = PageLoadStrategy.Eager;
         options.AddArgument($"--width={settings.WindowWidth}");
         options.AddArgument($"--height={settings.WindowHeight}");
         options.SetPreference("intl.accept_languages", "en-US");

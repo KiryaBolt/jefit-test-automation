@@ -21,11 +21,18 @@ public static class CookieBanner
         {
             var shortWait = new WebDriverWait(driver, TimeSpan.FromSeconds(4));
             shortWait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(StaleElementReferenceException));
-            shortWait.Until<IWebElement?>(d => d.FindElements(AcceptButton).FirstOrDefault(e => e.Displayed))?.Click();
+            var button = shortWait.Until<IWebElement?>(d => d.FindElements(AcceptButton).FirstOrDefault(e => e.Displayed));
+
+            // Клик через JavaScript: баннер ещё анимируется, и обычный клик перехватывается другим элементом
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", button);
         }
         catch (WebDriverTimeoutException)
         {
             /* баннера нет */
+        }
+        catch (WebDriverException)
+        {
+            /* баннер исчез во время клика — это не ошибка теста */
         }
 
         HandledDrivers.AddOrUpdate(driver, new object());

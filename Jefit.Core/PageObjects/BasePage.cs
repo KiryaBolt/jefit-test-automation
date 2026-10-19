@@ -77,5 +77,9 @@ public abstract class BasePage
     }
 
     private void WaitForDocumentReady() =>
-        _wait.Until(d => Equals(((IJavaScriptExecutor)d).ExecuteScript("return document.readyState"), "complete"));
+        _wait.Until(d =>
+        {
+            var state = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState")?.ToString();
+            return state is "interactive" or "complete";
+        });
 }
