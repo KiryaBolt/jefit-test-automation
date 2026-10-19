@@ -25,22 +25,26 @@ public class RoutinesPage : BasePage
         NavigateTo(driver, "/routines");
         return new RoutinesPage(driver);
     }
-
+    
     /// <summary>Число из надписи "26850 plans". Слово "plans" встречается и в меню, поэтому ищем текст строго вида "N plans".</summary>
-    public int GetPlansCount() =>
-        _wait.Until(d =>
+    public int GetPlansCount()
+    {
+        var number = _wait.Until(d =>
         {
             foreach (var element in d.FindElements(PlansCounterCandidates))
             {
                 var match = PlansCounterRegex.Match(element.Text.Trim());
                 if (element.Displayed && match.Success)
                 {
-                    return (int?)int.Parse(match.Groups[1].Value.Replace(",", string.Empty));
+                    return match.Groups[1].Value;
                 }
             }
 
             return null;
-        })!.Value;
+        })!;
+
+        return int.Parse(number.Replace(",", string.Empty));
+    }
 
     public IReadOnlyList<RoutineInfo> GetRoutineCards() =>
         _wait.Until(_ =>

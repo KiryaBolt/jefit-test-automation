@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Cross-browser run: the same UI scenarios in Chrome, Firefox and Edge.
+# Results of all browsers are merged into ./allure-results for a single report.
+set -uo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+RESULTS_SRC="$ROOT/Jefit.Test/bin/Release/net8.0/allure-results"
+MERGED="$ROOT/allure-results"
+BROWSERS="${BROWSERS:-chrome firefox edge}"
+
+rm -rf "$MERGED" && mkdir -p "$MERGED"
+dotnet build "$ROOT/JefitAutomation.sln" -c Release || exit 1
+
+for browser in $BROWSERS; do
+  echo "===== UI tests in $browser ====="
+  dotnet test "$ROOT/Jefit.Test" -c Release --no-build \
+    --settings "$ROOT/runsettings/$browser.runsettings" --filter "Category=ui" \
+    --logger "trx;LogFileName=$browser.trx"
+  cp -r "$RESULTS_SRC/." "$MERGED/"
+done
+
+echo "Browser=${BROWSERS// /, }" > "$MERGED/environment.properties"
+echo "Done. Open the report: allure serve $MERGED"

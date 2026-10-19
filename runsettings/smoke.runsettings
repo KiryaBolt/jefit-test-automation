@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Smoke: только @smoke, 4 потока -->
+<RunSettings>
+  <RunConfiguration>
+    <ResultsDirectory>./TestResults</ResultsDirectory>
+    <TestCaseFilter>Category=smoke</TestCaseFilter>
+    <EnvironmentVariables>
+      <JEFIT_TestSettings__IsHeadless>true</JEFIT_TestSettings__IsHeadless>
+    </EnvironmentVariables>
+  </RunConfiguration>
+  <NUnit>
+    <NumberOfTestWorkers>4</NumberOfTestWorkers>
+  </NUnit>
+</RunSettings>

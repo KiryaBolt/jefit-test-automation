@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Последовательный прогон в видимом браузере: 1 поток (отладка, демонстрация) -->
+<RunSettings>
+  <RunConfiguration>
+    <ResultsDirectory>./TestResults</ResultsDirectory>
+    <EnvironmentVariables>
+      <JEFIT_TestSettings__IsHeadless>false</JEFIT_TestSettings__IsHeadless>
+    </EnvironmentVariables>
+  </RunConfiguration>
+  <NUnit>
+    <NumberOfTestWorkers>1</NumberOfTestWorkers>
+  </NUnit>
+</RunSettings>

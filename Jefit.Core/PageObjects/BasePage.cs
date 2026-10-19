@@ -36,7 +36,15 @@ public abstract class BasePage
 
     public string GetPageTitle() => _driver.Title;
 
-    public string GetMainHeading() => new Label(_driver, By.TagName("h1")).Text;
+    /// <summary>Главный заголовок страницы: h1, а если его нет (страница плана) — первый h2.</summary>
+    public string GetMainHeading()
+    {
+        var heading = _wait.Until<IWebElement?>(d =>
+            d.FindElements(By.CssSelector("h1")).FirstOrDefault(e => e.Displayed)
+            ?? d.FindElements(By.CssSelector("h2")).FirstOrDefault(e => e.Displayed));
+
+        return heading!.Text.Trim();
+    }
 
     /// <summary>Ждёт условие; при таймауте возвращает false, а не бросает исключение.</summary>
     public bool WaitUntil(Func<IWebDriver, bool> condition)
