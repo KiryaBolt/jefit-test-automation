@@ -3,12 +3,12 @@ launch_status_broken 0
 launch_status_passed 55
 launch_status_skipped 4
 launch_status_unknown 0
-launch_time_duration 88232
+launch_time_duration 117649
 launch_time_min_duration 1
-launch_time_max_duration 15165
-launch_time_sum_duration 217489
-launch_time_start 1792485002410
-launch_time_stop 1792485090642
+launch_time_max_duration 14502
+launch_time_sum_duration 314844
+launch_time_start 1792498365773
+launch_time_stop 1792498483422
 launch_problems_пропущены_(не_настроен_аккаунт) 4
 launch_retries_retries 31
 launch_retries_run 59
