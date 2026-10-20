@@ -1,1 +1,1 @@
-{"total":1,"items":[{"uid":"9b110aec416b6d3dfeca8d462e99c806","name":"Пропущены (не настроен аккаунт)","statistic":{"failed":0,"broken":0,"skipped":4,"passed":0,"unknown":0,"total":4}}]}
+{"total":2,"items":[{"uid":"bc91c12445fab0c171b9dcea551aa93c","name":"Проблемы локаторов и ожиданий","statistic":{"failed":0,"broken":4,"skipped":0,"passed":0,"unknown":0,"total":4}},{"uid":"9b110aec416b6d3dfeca8d462e99c806","name":"Пропущены (не настроен аккаунт)","statistic":{"failed":0,"broken":0,"skipped":4,"passed":0,"unknown":0,"total":4}}]}
