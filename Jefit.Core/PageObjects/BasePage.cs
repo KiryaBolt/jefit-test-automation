@@ -72,7 +72,24 @@ public abstract class BasePage
         var url = pathOrUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
             ? pathOrUrl
             : $"{ConfigReader.Settings.BaseUrl.TrimEnd('/')}/{pathOrUrl.TrimStart('/')}";
-        driver.Navigate().GoToUrl(url);
+
+        try
+        {
+            driver.Navigate().GoToUrl(url);
+        }
+        catch (WebDriverTimeoutException)
+        {
+            // Сайт тянет много аналитики и картинок и может грузиться очень долго.
+            // Останавливаем загрузку и работаем с тем, что уже есть: нужные элементы мы всё равно ждём явно.
+            try
+            {
+                ((IJavaScriptExecutor)driver).ExecuteScript("window.stop();");
+            }
+            catch (WebDriverException)
+            {
+                // браузер уже ответил — останавливать нечего
+            }
+        }
     }
 
     /// <summary>Бросает понятную ошибку, если ключевой элемент страницы не появился.</summary>
