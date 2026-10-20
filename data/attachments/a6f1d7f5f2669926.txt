@@ -1,2 +1,0 @@
-Machine Fly
-/exercises/45/machine-fly
