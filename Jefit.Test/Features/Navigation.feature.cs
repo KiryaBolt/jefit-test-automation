@@ -22,6 +22,7 @@ namespace Jefit.Test.Features
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Site navigation")]
     [NUnit.Framework.CategoryAttribute("ui")]
+    [NUnit.Framework.CategoryAttribute("regression")]
     [NUnit.Framework.CategoryAttribute("epic:UI")]
     [NUnit.Framework.CategoryAttribute("story:Navigation")]
     public partial class SiteNavigationFeature
@@ -31,6 +32,7 @@ namespace Jefit.Test.Features
         
         private static string[] featureTags = new string[] {
                 "ui",
+                "regression",
                 "epic:UI",
                 "story:Navigation"};
         
@@ -150,7 +152,6 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Footer links open the corresponding pages")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         [NUnit.Framework.TestCaseAttribute("Exercise Database", "/exercises", "Exercise Database", null)]
         [NUnit.Framework.TestCaseAttribute("Workout Plans", "/routines", "Workout Routine Database", null)]
@@ -161,7 +162,6 @@ namespace Jefit.Test.Features
         public void FooterLinksOpenTheCorrespondingPages(string link, string url, string title, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "regression",
                     "normal"};
             if ((exampleTags != null))
             {
@@ -201,7 +201,6 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Footer contains links to Jefit social networks")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("minor")]
         [NUnit.Framework.TestCaseAttribute("Facebook", "facebook.com/jefitapp", null)]
         [NUnit.Framework.TestCaseAttribute("Instagram", "instagram.com/jefitapp", null)]
@@ -210,7 +209,6 @@ namespace Jefit.Test.Features
         public void FooterContainsLinksToJefitSocialNetworks(string network, string address, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "regression",
                     "minor"};
             if ((exampleTags != null))
             {

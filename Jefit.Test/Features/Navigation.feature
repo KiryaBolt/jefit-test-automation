@@ -1,4 +1,4 @@
-@ui @epic:UI @story:Navigation
+@ui @regression @epic:UI @story:Navigation
 Feature: Site navigation
   As a visitor of jefit.com
   I want to move between the main sections of the site
@@ -16,7 +16,7 @@ Feature: Site navigation
     When I click the Get Started button
     Then the current URL should contain "/signup"
 
-  @regression @normal
+  @normal
   Scenario Outline: Footer links open the corresponding pages
     Given I am on the Jefit home page
     When I click the "<link>" link in the footer
@@ -32,7 +32,7 @@ Feature: Site navigation
       | Blog              | /blog        | JEFIT                    |
       | FAQ               | /support/faq | JEFIT                    |
 
-  @regression @minor
+  @minor
   Scenario Outline: Footer contains links to Jefit social networks
     Given I am on the Jefit home page
     Then the footer link "<network>" should point to "<address>"

@@ -3,6 +3,7 @@
 <RunSettings>
   <RunConfiguration>
     <ResultsDirectory>./TestResults</ResultsDirectory>
+    <TestCaseFilter>Category=regression</TestCaseFilter>
     <EnvironmentVariables>
       <JEFIT_TestSettings__IsHeadless>true</JEFIT_TestSettings__IsHeadless>
     </EnvironmentVariables>

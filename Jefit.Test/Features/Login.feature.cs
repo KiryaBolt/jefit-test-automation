@@ -22,6 +22,7 @@ namespace Jefit.Test.Features
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Login")]
     [NUnit.Framework.CategoryAttribute("ui")]
+    [NUnit.Framework.CategoryAttribute("regression")]
     [NUnit.Framework.CategoryAttribute("epic:UI")]
     [NUnit.Framework.CategoryAttribute("story:Authorization")]
     public partial class LoginFeature
@@ -31,6 +32,7 @@ namespace Jefit.Test.Features
         
         private static string[] featureTags = new string[] {
                 "ui",
+                "regression",
                 "epic:UI",
                 "story:Authorization"};
         
@@ -113,12 +115,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Login with invalid credentials is rejected")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("critical")]
         public void LoginWithInvalidCredentialsIsRejected()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "critical"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with invalid credentials is rejected", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -147,12 +147,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Login with empty fields is not possible")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         public void LoginWithEmptyFieldsIsNotPossible()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "normal"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login with empty fields is not possible", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -182,13 +180,11 @@ namespace Jefit.Test.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Successful login with valid credentials")]
         [NUnit.Framework.CategoryAttribute("auth")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("blocker")]
         public void SuccessfulLoginWithValidCredentials()
         {
             string[] tagsOfScenario = new string[] {
                     "auth",
-                    "regression",
                     "blocker"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Successful login with valid credentials", null, tagsOfScenario, argumentsOfScenario, featureTags);

@@ -22,6 +22,7 @@ namespace Jefit.Test.Features
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Exercise database")]
     [NUnit.Framework.CategoryAttribute("ui")]
+    [NUnit.Framework.CategoryAttribute("regression")]
     [NUnit.Framework.CategoryAttribute("epic:UI")]
     [NUnit.Framework.CategoryAttribute("story:Exercise_Database")]
     public partial class ExerciseDatabaseFeature
@@ -31,6 +32,7 @@ namespace Jefit.Test.Features
         
         private static string[] featureTags = new string[] {
                 "ui",
+                "regression",
                 "epic:UI",
                 "story:Exercise_Database"};
         
@@ -119,7 +121,6 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Filtering exercises by muscle group")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         [NUnit.Framework.TestCaseAttribute("Chest", null)]
         [NUnit.Framework.TestCaseAttribute("Back", null)]
@@ -127,7 +128,6 @@ namespace Jefit.Test.Features
         public void FilteringExercisesByMuscleGroup(string muscle, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "regression",
                     "normal"};
             if ((exampleTags != null))
             {
@@ -165,12 +165,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Navigating to the second page of exercises")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         public void NavigatingToTheSecondPageOfExercises()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "normal"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigating to the second page of exercises", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -239,12 +237,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Exercise details page contains all information blocks")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         public void ExerciseDetailsPageContainsAllInformationBlocks()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "normal"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Exercise details page contains all information blocks", null, tagsOfScenario, argumentsOfScenario, featureTags);

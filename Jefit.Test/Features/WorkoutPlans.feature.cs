@@ -22,6 +22,7 @@ namespace Jefit.Test.Features
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Workout plans database")]
     [NUnit.Framework.CategoryAttribute("ui")]
+    [NUnit.Framework.CategoryAttribute("regression")]
     [NUnit.Framework.CategoryAttribute("epic:UI")]
     [NUnit.Framework.CategoryAttribute("story:Workout_Plans")]
     public partial class WorkoutPlansDatabaseFeature
@@ -31,6 +32,7 @@ namespace Jefit.Test.Features
         
         private static string[] featureTags = new string[] {
                 "ui",
+                "regression",
                 "epic:UI",
                 "story:Workout_Plans"};
         
@@ -119,7 +121,6 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Opening a workout plan category")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         [NUnit.Framework.TestCaseAttribute("Beginner", "/routines/beginner", null)]
         [NUnit.Framework.TestCaseAttribute("Home", "/routines/home", null)]
@@ -127,7 +128,6 @@ namespace Jefit.Test.Features
         public void OpeningAWorkoutPlanCategory(string category, string url, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "regression",
                     "normal"};
             if ((exampleTags != null))
             {
@@ -166,12 +166,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Opening workout plan details from the list")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         public void OpeningWorkoutPlanDetailsFromTheList()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "normal"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Opening workout plan details from the list", null, tagsOfScenario, argumentsOfScenario, featureTags);

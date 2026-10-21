@@ -22,6 +22,7 @@ namespace Jefit.Test.Features
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("UI checks with test data prepared via API")]
     [NUnit.Framework.CategoryAttribute("ui")]
+    [NUnit.Framework.CategoryAttribute("regression")]
     [NUnit.Framework.CategoryAttribute("api-data")]
     [NUnit.Framework.CategoryAttribute("epic:UI")]
     [NUnit.Framework.CategoryAttribute("story:API_prepared_test_data")]
@@ -32,6 +33,7 @@ namespace Jefit.Test.Features
         
         private static string[] featureTags = new string[] {
                 "ui",
+                "regression",
                 "api-data",
                 "epic:UI",
                 "story:API_prepared_test_data"};
@@ -84,12 +86,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Random exercise received via API is displayed correctly in UI")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         public void RandomExerciseReceivedViaAPIIsDisplayedCorrectlyInUI()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "normal"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Random exercise received via API is displayed correctly in UI", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -121,12 +121,10 @@ namespace Jefit.Test.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Random workout plan received via API is displayed correctly in UI")]
-        [NUnit.Framework.CategoryAttribute("regression")]
         [NUnit.Framework.CategoryAttribute("normal")]
         public void RandomWorkoutPlanReceivedViaAPIIsDisplayedCorrectlyInUI()
         {
             string[] tagsOfScenario = new string[] {
-                    "regression",
                     "normal"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Random workout plan received via API is displayed correctly in UI", null, tagsOfScenario, argumentsOfScenario, featureTags);

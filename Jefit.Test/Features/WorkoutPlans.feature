@@ -1,4 +1,4 @@
-@ui @epic:UI @story:Workout_Plans
+@ui @regression @epic:UI @story:Workout_Plans
 Feature: Workout plans database
   As a Jefit user
   I want to browse ready-made workout plans
@@ -11,7 +11,7 @@ Feature: Workout plans database
     And the plans counter should show more than 1000 plans
     And at least 10 workout plan cards should be displayed
 
-  @regression @normal
+  @normal
   Scenario Outline: Opening a workout plan category
     Given I open the workout plans page
     When I select the workout plan category "<category>"
@@ -24,7 +24,7 @@ Feature: Workout plans database
       | Home            | /routines/home            |
       | Muscle Building | /routines/muscle-building |
 
-  @regression @normal
+  @normal
   Scenario: Opening workout plan details from the list
     Given I open the workout plans page
     When I open the first workout plan from the list

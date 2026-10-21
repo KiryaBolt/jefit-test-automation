@@ -1,4 +1,4 @@
-@ui @epic:UI @story:Exercise_Database
+@ui @regression @epic:UI @story:Exercise_Database
 Feature: Exercise database
   As a Jefit user
   I want to browse and filter the exercise database
@@ -11,7 +11,7 @@ Feature: Exercise database
     And the exercise counter should show more than 1000 exercises
     And at least 10 exercise cards should be displayed
 
-  @regression @normal
+  @normal
   Scenario Outline: Filtering exercises by muscle group
     Given I open the exercise database page
     When I filter exercises by muscle "<muscle>"
@@ -24,7 +24,7 @@ Feature: Exercise database
       | Back   |
       | Biceps |
 
-  @regression @normal
+  @normal
   Scenario: Navigating to the second page of exercises
     Given I open the exercise database page
     When I go to the next page of exercises
@@ -38,7 +38,7 @@ Feature: Exercise database
     Then the current URL should contain "/exercises/2/barbell-bench-press"
     And the main heading should be "Barbell Bench Press"
 
-  @regression @normal
+  @normal
   Scenario: Exercise details page contains all information blocks
     Given I open the exercise details page "/exercises/2/barbell-bench-press"
     Then the exercise page should contain the following sections:

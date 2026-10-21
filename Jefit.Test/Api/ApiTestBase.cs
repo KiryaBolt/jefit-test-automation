@@ -7,6 +7,7 @@ namespace Jefit.Test.Api;
 [AllureNUnit]
 [AllureEpic("API")]
 [Category("api")]
+[Category("regression")]
 public abstract class ApiTestBase
 {
     protected JefitWebClient Client = null!;
