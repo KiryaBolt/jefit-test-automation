@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Runtime.InteropServices;
 using Jefit.Core.Configuration;
 using OpenQA.Selenium;
@@ -40,7 +39,7 @@ public static class DriverFactory
 
         if (!headless)
         {
-            driver.Manage().Window.Size = new Size(settings.WindowWidth, settings.WindowHeight);
+            driver.Manage().Window.Maximize();
         }
 
         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(settings.ImplicitWaitTimeout);
@@ -74,7 +73,7 @@ public static class DriverFactory
     // Chrome и Edge построены на Chromium, поэтому аргументы у них общие
     private static void AddChromiumArguments(Action<string> addArgument, TestSettings settings, bool headless)
     {
-        addArgument($"--window-size={settings.WindowWidth},{settings.WindowHeight}");
+        addArgument(headless ? $"--window-size={settings.WindowWidth},{settings.WindowHeight}" : "--start-maximized");
         addArgument("--lang=en-US");
         addArgument("--disable-notifications");
 
@@ -91,8 +90,11 @@ public static class DriverFactory
     {
         var options = new FirefoxOptions();
         options.PageLoadStrategy = PageLoadStrategy.Eager;
-        options.AddArgument($"--width={settings.WindowWidth}");
-        options.AddArgument($"--height={settings.WindowHeight}");
+        if (headless)
+        {
+            options.AddArgument($"--width={settings.WindowWidth}");
+            options.AddArgument($"--height={settings.WindowHeight}");
+        }
         options.SetPreference("intl.accept_languages", "en-US");
         if (headless) options.AddArgument("--headless");
         return options;

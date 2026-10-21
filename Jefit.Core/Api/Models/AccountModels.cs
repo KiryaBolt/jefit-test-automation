@@ -1,10 +1,17 @@
+using System.Text.Json.Serialization;
+
 namespace Jefit.Core.Api.Models;
 
-// Модели запросов аккаунта. Имена полей нужно сверить с реальными запросами
-// в DevTools -> Network (RestSharp сериализует их в camelCase: email, password, name).
+// Контракты взяты из реальных запросов сайта (DevTools -> Network и код страницы входа).
 
-public record LoginRequest(string Email, string Password);
+/// <summary>Тело POST /api/v2/auth/login. Пароль сайт отправляет не открыто, а как MD5-хеш.</summary>
+public record LoginRequest(
+    [property: JsonPropertyName("platform")] string Platform,
+    [property: JsonPropertyName("username")] string Username,
+    [property: JsonPropertyName("passwordMd5")] string PasswordMd5);
 
-public record CreateWorkoutPlanRequest(string Name);
+/// <summary>Тело POST /api/v2/routines/download: добавить готовый план из каталога в «Мои планы».</summary>
+public record DownloadRoutineRequest(
+    [property: JsonPropertyName("routine_id")] int RoutineId);
 
 public record LoginResult(ApiResponse Response, bool IsSuccess);

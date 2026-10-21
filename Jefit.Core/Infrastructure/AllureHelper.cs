@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using Allure.Net.Commons;
 using Jefit.Core.Api;
 
@@ -18,12 +19,21 @@ public static class AllureHelper
     public static void AttachPng(string name, byte[] png) =>
         TryAttach(name, "image/png", png, "png");
 
-    /// <summary>Каждый HTTP-запрос: метод, URL, статус, время ответа и тело (обрезанное).</summary>
+    // Отчёт публикуется на GitHub Pages и доступен всем: токены и личные данные в нём скрываем
+    private static readonly Regex SensitiveJsonField = new(
+        "\"(accessToken|refreshToken|token|email|username|password\\w*)\"\\s*:\\s*\"[^\"]*\"",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    public static string MaskSensitive(string text) =>
+        SensitiveJsonField.Replace(text, match => $"\"{match.Groups[1].Value}\": \"***\"");
+
+    /// <summary>Каждый HTTP-запрос: метод, URL, статус, время ответа и тело (обрезанное, без токенов и личных данных).</summary>
     public static void AttachApiCall(string method, string url, ApiResponse response)
     {
-        var body = response.Body.Length > MaxBodyLength
-            ? response.Body[..MaxBodyLength] + $"\n... [обрезано, всего {response.Body.Length} символов]"
-            : response.Body;
+        var masked = MaskSensitive(response.Body);
+        var body = masked.Length > MaxBodyLength
+            ? masked[..MaxBodyLength] + $"\n... [обрезано, всего {masked.Length} символов]"
+            : masked;
 
         var text = new StringBuilder()
             .AppendLine($"{method} {url}")

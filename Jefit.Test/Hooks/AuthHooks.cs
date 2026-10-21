@@ -47,7 +47,7 @@ public class AuthHooks
     public void DeleteCreatedData()
     {
         if (_data.CreatedPlanId is null) return;
-        _account.DeleteWorkoutPlanAsync(_data.CreatedPlanId).GetAwaiter().GetResult();
+        _account.DeleteRoutineAsync(_data.CreatedPlanId).GetAwaiter().GetResult();
         _data.CreatedPlanId = null;
     }
 }

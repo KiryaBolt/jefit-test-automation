@@ -2,7 +2,7 @@ using TechTalk.SpecFlow;
 
 namespace Jefit.Test.StepDefinitions;
 
-/// <summary>Логин через API, создание плана через API, проверка в UI.</summary>
+/// <summary>Вход через API, добавление плана через API, проверка в UI. План удаляется в AuthHooks после сценария.</summary>
 [Binding]
 public class AccountSteps
 {
@@ -22,16 +22,15 @@ public class AccountSteps
     {
         var settings = ConfigReader.Settings;
         var result = await _account.LoginAsync(new UserCredentials(settings.UserEmail, settings.UserPassword));
-        Assert.That(result.IsSuccess, Is.True, $"Логин через API не удался: HTTP {result.Response.StatusCode}");
+        Assert.That(result.IsSuccess, Is.True, $"Вход через API не удался: HTTP {result.Response.StatusCode}");
     }
 
-    [Given(@"I have created a workout plan with a generated name via API")]
-    public async Task GivenIHaveCreatedAWorkoutPlanWithAGeneratedNameViaApi()
+    [Given(@"I have added the catalog workout plan (\d+) ""(.*)"" via API")]
+    public async Task GivenIHaveAddedTheCatalogWorkoutPlanViaApi(int catalogRoutineId, string name)
     {
-        var name = TestDataGenerator.GenerateWorkoutPlanName();
-        _data.CreatedPlanId = await _account.CreateWorkoutPlanAsync(name);
+        _data.CreatedPlanId = await _account.AddRoutineFromCatalogAsync(catalogRoutineId);
         _data.RememberedName = name;
-        AllureHelper.AttachText("Создано через API", $"{name} (id {_data.CreatedPlanId})");
+        AllureHelper.AttachText("Добавлено через API", $"{name} (план пользователя {_data.CreatedPlanId})");
     }
 
     [When(@"I transfer the API session to the browser")]
@@ -42,12 +41,12 @@ public class AccountSteps
     public void WhenIOpenTheMyPlansPage() =>
         GenericPage.Open(_browser.Driver, ConfigReader.Settings.MyPlansPath);
 
-    [Then(@"the created workout plan should be displayed")]
-    public void ThenTheCreatedWorkoutPlanShouldBeDisplayed()
+    [Then(@"the added workout plan should be displayed")]
+    public void ThenTheAddedWorkoutPlanShouldBeDisplayed()
     {
         var page = new GenericPage(_browser.Driver);
         var name = _data.RememberedName!;
         var isDisplayed = page.WaitUntil(_ => page.GetBodyText().Contains(name, StringComparison.OrdinalIgnoreCase));
-        Assert.That(isDisplayed, Is.True, $"План \"{name}\", созданный через API, не отображается в UI");
+        Assert.That(isDisplayed, Is.True, $"План \"{name}\", добавленный через API, не отображается в «Моих планах»");
     }
 }

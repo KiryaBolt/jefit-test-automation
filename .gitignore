@@ -429,3 +429,4 @@ FodyWeavers.xsd
 .idea/
 allure-results/
 appsettings.local.json
+.DS_Store

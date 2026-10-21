@@ -1,4 +1,6 @@
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Jefit.Core.Api.Models;
 using Jefit.Core.Infrastructure;
@@ -7,15 +9,14 @@ using RestSharp;
 namespace Jefit.Core.Api;
 
 /// <summary>
-/// Клиент для авторизованных запросов (логин, планы тренировок).
-/// ВАЖНО: у Jefit нет публичного API. Пути и формат запросов настраиваются в appsettings.json
-/// после изучения сайта в DevTools -> Network. Пока не настроено, тесты @auth пропускаются.
+/// Клиент авторизованной части Jefit. Эндпоинты найдены в браузере (DevTools и код страницы входа):
+///   POST   /api/v2/auth/login         {platform, username, passwordMd5} -> accessToken + сессионная cookie
+///   POST   /api/v2/routines/download  {routine_id} -> {row_id}: план из каталога добавлен в «Мои планы»
+///   DELETE /api/v2/routines/u_{row_id, 12 цифр}: удалить план пользователя
+/// Сессия держится в httpOnly-cookie, поэтому все запросы идут через общий CookieContainer.
 /// </summary>
 public class JefitAccountClient : BaseApiClient
 {
-    private static readonly string[] TokenFields = { "token", "accessToken", "access_token", "jwt" };
-    private static readonly string[] IdFields = { "id", "routineId", "planId", "routine_id" };
-
     public JefitAccountClient() : this(new CookieContainer())
     {
     }
@@ -25,7 +26,7 @@ public class JefitAccountClient : BaseApiClient
         Cookies = cookies;
     }
 
-    /// <summary>Cookie сессии после логина — их можно перенести в браузер.</summary>
+    /// <summary>Cookie сессии после входа — их можно перенести в браузер.</summary>
     public CookieContainer Cookies { get; }
 
     public string? AccessToken { get; private set; }
@@ -33,85 +34,70 @@ public class JefitAccountClient : BaseApiClient
     public async Task<LoginResult> LoginAsync(UserCredentials credentials)
     {
         var request = new RestRequest(Settings.AccountLoginPath, Method.Post)
-            .AddJsonBody(new LoginRequest(credentials.Email, credentials.Password));
+            .AddJsonBody(new LoginRequest("web", credentials.Email, Md5Hex(credentials.Password)));
 
         var response = await SendAsync(request);
-        AccessToken = FindValue(response.Body, TokenFields);
+        AccessToken = ReadString(response.Body, "accessToken");
 
         var hasSession = AccessToken is not null || Cookies.Count > 0;
         return new LoginResult(response, response.IsSuccessful && hasSession);
     }
 
-    public async Task<string> CreateWorkoutPlanAsync(string name)
+    /// <summary>Добавляет готовый план из каталога в «Мои планы». Возвращает id плана пользователя для удаления.</summary>
+    public async Task<string> AddRoutineFromCatalogAsync(int catalogRoutineId)
     {
-        var request = Authorize(new RestRequest(Settings.AccountRoutinesPath, Method.Post)
-            .AddJsonBody(new CreateWorkoutPlanRequest(name)));
+        var request = new RestRequest($"{Settings.AccountRoutinesPath.TrimEnd('/')}/download", Method.Post)
+            .AddJsonBody(new DownloadRoutineRequest(catalogRoutineId));
 
         var response = await SendAsync(request);
         if (!response.IsSuccessful)
         {
-            throw new InvalidOperationException($"План не создан: HTTP {response.StatusCode}");
+            throw new InvalidOperationException($"План {catalogRoutineId} не добавлен: HTTP {response.StatusCode}");
         }
 
-        return FindValue(response.Body, IdFields)
-               ?? throw new InvalidOperationException("В ответе нет id созданного плана.");
+        var rowId = ReadNumber(response.Body, "row_id")
+                    ?? throw new InvalidOperationException("В ответе нет row_id добавленного плана.");
+
+        // Сайт адресует планы пользователя как "u_" + номер, дополненный нулями до 12 цифр
+        return $"u_{rowId:D12}";
     }
 
-    public Task<ApiResponse> DeleteWorkoutPlanAsync(string id) =>
-        SendAsync(Authorize(new RestRequest($"{Settings.AccountRoutinesPath.TrimEnd('/')}/{id}", Method.Delete)));
-
-    private RestRequest Authorize(RestRequest request)
-    {
-        if (AccessToken is not null)
-        {
-            request.AddHeader("Authorization", $"Bearer {AccessToken}");
-        }
-
-        return request;
-    }
+    public Task<ApiResponse> DeleteRoutineAsync(string userRoutineId) =>
+        SendAsync(new RestRequest($"{Settings.AccountRoutinesPath.TrimEnd('/')}/{userRoutineId}", Method.Delete));
 
     private static string GetBaseUrl() =>
         string.IsNullOrWhiteSpace(Settings.AccountApiBaseUrl) ? Settings.ApiBaseUrl : Settings.AccountApiBaseUrl;
 
-    /// <summary>Рекурсивно ищет в JSON первое поле с одним из имён (токен, id).</summary>
-    private static string? FindValue(string json, IReadOnlyCollection<string> names)
+    /// <summary>Сайт хеширует пароль MD5 в браузере перед отправкой; повторяем то же самое.</summary>
+    private static string Md5Hex(string value) =>
+        Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
+
+    private static string? ReadString(string json, string property)
     {
-        if (string.IsNullOrWhiteSpace(json)) return null;
         try
         {
             using var document = JsonDocument.Parse(json);
-            return Find(document.RootElement);
+            return document.RootElement.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String
+                ? value.GetString()
+                : null;
         }
         catch (JsonException)
         {
             return null;
         }
+    }
 
-        string? Find(JsonElement element)
+    private static long? ReadNumber(string json, string property)
+    {
+        try
         {
-            if (element.ValueKind == JsonValueKind.Object)
-            {
-                foreach (var property in element.EnumerateObject())
-                {
-                    if (names.Contains(property.Name, StringComparer.OrdinalIgnoreCase) &&
-                        property.Value.ValueKind is JsonValueKind.String or JsonValueKind.Number)
-                    {
-                        return property.Value.ToString();
-                    }
-
-                    var nested = Find(property.Value);
-                    if (nested is not null) return nested;
-                }
-            }
-            else if (element.ValueKind == JsonValueKind.Array)
-            {
-                foreach (var item in element.EnumerateArray())
-                {
-                    var nested = Find(item);
-                    if (nested is not null) return nested;
-                }
-            }
-
+            using var document = JsonDocument.Parse(json);
+            if (!document.RootElement.TryGetProperty(property, out var value)) return null;
+            if (value.ValueKind == JsonValueKind.Number && value.TryGetInt64(out var number)) return number;
+            return value.ValueKind == JsonValueKind.String && long.TryParse(value.GetString(), out var parsed) ? parsed : null;
+        }
+        catch (JsonException)
+        {
             return null;
         }
     }

@@ -11,14 +11,29 @@ public static class SessionTransfer
 {
     public static void CopyCookiesToBrowser(IWebDriver driver, CookieContainer cookies, string baseUrl)
     {
-        driver.Navigate().GoToUrl(baseUrl);
+        // Cookie можно добавить только на странице нужного домена. Открываем не главную (она тяжёлая
+        // и может грузиться дольше таймаута), а лёгкий текстовый файл того же сайта.
+        try
+        {
+            driver.Navigate().GoToUrl(baseUrl.TrimEnd('/') + "/robots.txt");
+        }
+        catch (WebDriverTimeoutException)
+        {
+            try
+            {
+                ((IJavaScriptExecutor)driver).ExecuteScript("window.stop();");
+            }
+            catch (WebDriverException)
+            {
+                // браузер уже ответил — останавливать нечего
+            }
+        }
+
         foreach (System.Net.Cookie cookie in cookies.GetAllCookies())
         {
             DateTime? expiry = cookie.Expires == DateTime.MinValue ? null : cookie.Expires;
-            driver.Manage().Cookies.AddCookie(
-                new OpenQA.Selenium.Cookie(cookie.Name, cookie.Value, cookie.Domain, cookie.Path, expiry));
+            // Без домена: cookie привязывается к текущему сайту (www.jefit.com)
+            driver.Manage().Cookies.AddCookie(new OpenQA.Selenium.Cookie(cookie.Name, cookie.Value, "/", expiry));
         }
-
-        driver.Navigate().Refresh();
     }
 }
