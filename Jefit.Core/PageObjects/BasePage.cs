@@ -91,6 +91,34 @@ public abstract class BasePage
             }
         }
     }
+    
+    /// <summary>
+    /// Ждёт ключевой элемент; если он не появился, один раз перезагружает страницу.
+    /// Нужно для страниц, которые рисуются скриптами: если загрузку пришлось оборвать по таймауту,
+    /// скрипты могли не выполниться, а после перезагрузки (ресурсы уже в кэше) страница рисуется нормально.
+    /// </summary>
+    protected void EnsureDisplayedWithReload(BaseElement element, string pageName, int firstWaitSeconds = 12)
+    {
+        if (element.IsDisplayed(firstWaitSeconds)) return;
+
+        try
+        {
+            _driver.Navigate().Refresh();
+        }
+        catch (WebDriverTimeoutException)
+        {
+            try
+            {
+                ((IJavaScriptExecutor)_driver).ExecuteScript("window.stop();");
+            }
+            catch (WebDriverException)
+            {
+                // браузер уже ответил — останавливать нечего
+            }
+        }
+
+        EnsureDisplayed(element, pageName);
+    }
 
     /// <summary>Бросает понятную ошибку, если ключевой элемент страницы не появился.</summary>
     protected void EnsureDisplayed(BaseElement element, string pageName)

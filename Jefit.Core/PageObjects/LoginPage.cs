@@ -49,5 +49,5 @@ public class LoginPage : BasePage
     public bool WaitForLeavingLoginPage() =>
         WaitUntil(d => !d.Url.Contains("/login", StringComparison.OrdinalIgnoreCase));
 
-    protected override void WaitForPageLoad() => EnsureDisplayed(EmailInput, "Вход");
+    protected override void WaitForPageLoad() => EnsureDisplayedWithReload(EmailInput, "Вход");
 }
