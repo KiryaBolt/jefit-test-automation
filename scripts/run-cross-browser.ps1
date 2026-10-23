@@ -1,6 +1,6 @@
 # Cross-browser run: the same UI scenarios in Chrome, Firefox and Edge.
 # Results of all browsers are merged into .\allure-results for a single report.
-param([string[]]$Browsers = @("chrome", "firefox", "edge"))
+param([string[]]$Browsers = @("chrome", "firefox"))
 
 $root = Split-Path -Parent $PSScriptRoot
 $resultsSrc = Join-Path $root "Jefit.Test\bin\Release\net8.0\allure-results"

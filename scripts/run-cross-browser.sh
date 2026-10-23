@@ -6,7 +6,7 @@ set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RESULTS_SRC="$ROOT/Jefit.Test/bin/Release/net8.0/allure-results"
 MERGED="$ROOT/allure-results"
-BROWSERS="${BROWSERS:-chrome firefox edge}"
+BROWSERS="${BROWSERS:-chrome firefox}"
 
 rm -rf "$MERGED" && mkdir -p "$MERGED"
 dotnet build "$ROOT/JefitAutomation.sln" -c Release || exit 1
