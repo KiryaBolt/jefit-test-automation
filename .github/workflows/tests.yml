@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [ chrome, firefox ]
+        browser: [ chrome, firefox ]   # cross-browser plan (Edge не используем)
     steps:
       - uses: actions/checkout@v4
 
@@ -97,6 +97,31 @@ jobs:
           merge-multiple: true
           path: allure-results
 
+      # История: берём папку history из прошлого опубликованного отчёта (ветка gh-pages).
+      # Если ветки ещё нет (первый запуск), шаг не падает.
+      - name: Load previous report
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Restore history into results
+        run: |
+          if [ -d gh-pages/history ]; then
+            cp -r gh-pages/history allure-results/history
+            echo "История найдена, файлов: $(ls gh-pages/history | wc -l)"
+          else
+            echo "Истории пока нет: она появится после этого запуска"
+          fi
+
+      # Номер запуска нужен, чтобы на графиках истории подписывать точки
+      - name: Add run info
+        run: |
+          cat > allure-results/executor.json <<'EOF'
+          {"name":"GitHub Actions","type":"github","url":"${{ github.server_url }}/${{ github.repository }}","buildOrder":${{ github.run_number }},"buildName":"Запуск №${{ github.run_number }}","buildUrl":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}","reportName":"Jefit Allure Report"}
+          EOF
+
       - name: Install Allure commandline
         run: npm install -g allure-commandline
 
@@ -110,6 +135,7 @@ jobs:
           path: allure-report
           retention-days: 14
 
+      # Отчёт вместе с новой папкой history публикуется в gh-pages и станет историей для следующего запуска
       - name: Publish report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
