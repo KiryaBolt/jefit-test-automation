@@ -6,7 +6,6 @@ namespace Jefit.Test.Hooks;
 [Binding]
 public static class TestRunHooks
 {
-    /// <summary>Блок Environment и категории ошибок в Allure-отчёте.</summary>
     [BeforeTestRun]
     public static void PrepareAllureResults()
     {

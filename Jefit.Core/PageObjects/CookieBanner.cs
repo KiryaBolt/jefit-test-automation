@@ -4,13 +4,11 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Jefit.Core.PageObjects;
 
-/// <summary>Баннер "We value your privacy" -> кнопка Accept.</summary>
 public static class CookieBanner
 {
     private static readonly By AcceptButton =
         By.XPath("//*[self::button or @role='button'][normalize-space()='Accept']");
 
-    // Запоминаем браузеры, где баннер уже обработан, чтобы не ждать его на каждой странице
     private static readonly ConditionalWeakTable<IWebDriver, object> HandledDrivers = new();
 
     public static void AcceptIfPresent(IWebDriver driver)
@@ -23,16 +21,13 @@ public static class CookieBanner
             shortWait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(StaleElementReferenceException));
             var button = shortWait.Until<IWebElement?>(d => d.FindElements(AcceptButton).FirstOrDefault(e => e.Displayed));
 
-            // Клик через JavaScript: баннер ещё анимируется, и обычный клик перехватывается другим элементом
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", button);
         }
         catch (WebDriverTimeoutException)
         {
-            /* баннера нет */
         }
         catch (WebDriverException)
         {
-            /* баннер исчез во время клика — это не ошибка теста */
         }
 
         HandledDrivers.AddOrUpdate(driver, new object());

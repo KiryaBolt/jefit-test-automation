@@ -5,7 +5,6 @@ using Jefit.Core.Api;
 
 namespace Jefit.Core.Infrastructure;
 
-/// <summary>Вложения и метаданные для Allure-отчёта.</summary>
 public static class AllureHelper
 {
     private const int MaxBodyLength = 5000;
@@ -19,7 +18,6 @@ public static class AllureHelper
     public static void AttachPng(string name, byte[] png) =>
         TryAttach(name, "image/png", png, "png");
 
-    // Отчёт публикуется на GitHub Pages и доступен всем: токены и личные данные в нём скрываем
     private static readonly Regex SensitiveJsonField = new(
         "\"(accessToken|refreshToken|token|email|username|password\\w*)\"\\s*:\\s*\"[^\"]*\"",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -27,7 +25,6 @@ public static class AllureHelper
     public static string MaskSensitive(string text) =>
         SensitiveJsonField.Replace(text, match => $"\"{match.Groups[1].Value}\": \"***\"");
 
-    /// <summary>Каждый HTTP-запрос: метод, URL, статус, время ответа и тело (обрезанное, без токенов и личных данных).</summary>
     public static void AttachApiCall(string method, string url, ApiResponse response)
     {
         var masked = MaskSensitive(response.Body);
@@ -47,7 +44,6 @@ public static class AllureHelper
         AttachText($"HTTP {method} {url}", text);
     }
 
-    /// <summary>Параметр теста (например Browser) — разделяет один сценарий в разных браузерах.</summary>
     public static void AddParameter(string name, string value)
     {
         try
@@ -56,7 +52,6 @@ public static class AllureHelper
         }
         catch (Exception)
         {
-            // Нет активного теста Allure — пропускаем
         }
     }
 
@@ -84,7 +79,6 @@ public static class AllureHelper
         }
         catch (Exception)
         {
-            // Вызов вне теста (например, в BeforeTestRun) — прикреплять некуда
         }
     }
 }

@@ -2,10 +2,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace Jefit.Core.Configuration;
 
-/// <summary>
-/// Загружает TestSettings один раз за прогон (потокобезопасно — важно для параллельного запуска).
-/// Приоритет: переменные окружения JEFIT_* &gt; appsettings.local.json &gt; appsettings.json.
-/// </summary>
 public static class ConfigReader
 {
     private static readonly Lazy<TestSettings> LazySettings =

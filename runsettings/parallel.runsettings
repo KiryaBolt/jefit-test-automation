@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Параллельный прогон: 4 потока -->
 <RunSettings>
   <RunConfiguration>
     <ResultsDirectory>./TestResults</ResultsDirectory>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Кросс-браузерный план: Google Chrome -->
 <RunSettings>
   <RunConfiguration>
     <ResultsDirectory>./TestResults</ResultsDirectory>

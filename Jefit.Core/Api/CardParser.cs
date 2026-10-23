@@ -3,7 +3,6 @@ using Jefit.Core.Infrastructure;
 
 namespace Jefit.Core.Api;
 
-/// <summary>Общие правила распознавания ссылок на упражнения и планы (используются и в UI, и в API).</summary>
 public static class CardParser
 {
     public static readonly Regex ExerciseHref = new(@"/exercises/(\d+)/([\w-]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -12,7 +11,6 @@ public static class CardParser
     public const string ExerciseAltSuffix = " Demonstration";
     public const string RoutineAltSuffix = " banner";
 
-    /// <summary>Название берётся из alt картинки карточки ("Barbell Bench Press Demonstration"), запасной вариант — slug.</summary>
     public static string ResolveName(string? imageAlt, string slug, string altSuffix)
     {
         var name = (imageAlt ?? string.Empty).Trim();

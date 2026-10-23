@@ -10,7 +10,6 @@ public class Button : BaseElement
 
     public bool IsEnabled => Element.Enabled;
 
-    /// <summary>Ждёт, пока кнопка станет видимой и активной, и нажимает её.</summary>
     public void Click()
     {
         var element = CreateWait().Until<IWebElement?>(d =>
@@ -18,7 +17,6 @@ public class Button : BaseElement
         SafeClick(element);
     }
 
-    /// <summary>Нажатие без ожидания активности — для негативных проверок (неактивная кнопка).</summary>
     public void ClickWithoutWaitingEnabled() => SafeClick(Element);
 
     private void SafeClick(IWebElement element)
@@ -30,7 +28,6 @@ public class Button : BaseElement
         }
         catch (ElementClickInterceptedException)
         {
-            // Элемент перекрыт (липкая шапка, баннер) — кликаем через JavaScript
             ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", element);
         }
     }

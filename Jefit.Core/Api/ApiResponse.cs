@@ -2,7 +2,6 @@ using RestSharp;
 
 namespace Jefit.Core.Api;
 
-/// <summary>Обёртка над RestResponse: время ответа и удобный доступ к заголовкам.</summary>
 public class ApiResponse
 {
     public ApiResponse(RestResponse raw, TimeSpan elapsed)

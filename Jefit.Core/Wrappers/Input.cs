@@ -18,8 +18,6 @@ public class Input : BaseElement
         element.SendKeys(text);
     }
 
-    // Clear() на React-полях иногда не срабатывает — тогда очищаем через выделение всего текста.
-    // Cmd+A на macOS и Ctrl+A на Windows/Linux, чтобы не напечатать лишнюю "a".
     private static void Clear(IWebElement element)
     {
         element.Clear();

@@ -2,7 +2,6 @@ using TechTalk.SpecFlow;
 
 namespace Jefit.Test.StepDefinitions;
 
-/// <summary>Вход через API, добавление плана через API, проверка в UI. План удаляется в AuthHooks после сценария.</summary>
 [Binding]
 public class AccountSteps
 {

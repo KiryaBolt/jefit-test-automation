@@ -3,7 +3,6 @@ using Allure.NUnit.Attributes;
 
 namespace Jefit.Test.Api;
 
-/// <summary>База для API-тестов: свой HTTP-клиент на каждый тест.</summary>
 [AllureNUnit]
 [AllureEpic("API")]
 [Category("api")]

@@ -4,11 +4,6 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Jefit.Core.Wrappers;
 
-/// <summary>
-/// Базовая обёртка над элементом страницы. Элемент ищется заново при каждом обращении
-/// (с явным ожиданием), поэтому не бывает StaleElementReferenceException
-/// на динамическом сайте (Jefit сделан на Next.js и часто перерисовывает DOM).
-/// </summary>
 public abstract class BaseElement
 {
     protected readonly IWebDriver _driver;
@@ -20,7 +15,6 @@ public abstract class BaseElement
         _locator = locator;
     }
 
-    /// <summary>Первый видимый элемент по локатору.</summary>
     protected IWebElement Element =>
         CreateWait().Until<IWebElement?>(d => d.FindElements(_locator).FirstOrDefault(e => e.Displayed))!;
 

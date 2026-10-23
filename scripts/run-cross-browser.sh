@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Cross-browser run: the same UI scenarios in Chrome, Firefox and Edge.
-# Results of all browsers are merged into ./allure-results for a single report.
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

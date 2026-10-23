@@ -6,10 +6,6 @@ using RestSharp;
 
 namespace Jefit.Core.Api;
 
-/// <summary>
-/// Базовый RestSharp-клиент: общие настройки, замер времени ответа
-/// и автоматическое прикрепление каждого запроса/ответа к Allure-отчёту.
-/// </summary>
 public abstract class BaseApiClient : IDisposable
 {
     private readonly RestClient _client;

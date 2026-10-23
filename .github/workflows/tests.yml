@@ -1,7 +1,6 @@
 name: Jefit autotests
 
 on:
-  # Запуск только вручную: вкладка Actions -> Jefit autotests -> Run workflow
   workflow_dispatch:
     inputs:
       filter:
@@ -54,7 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [ chrome, firefox ]   # cross-browser plan (Edge не используем)
+        browser: [ chrome, firefox ]
     steps:
       - uses: actions/checkout@v4
 
@@ -97,8 +96,6 @@ jobs:
           merge-multiple: true
           path: allure-results
 
-      # История: берём папку history из прошлого опубликованного отчёта (ветка gh-pages).
-      # Если ветки ещё нет (первый запуск), шаг не падает.
       - name: Load previous report
         uses: actions/checkout@v4
         continue-on-error: true
@@ -115,7 +112,6 @@ jobs:
             echo "Истории пока нет: она появится после этого запуска"
           fi
 
-      # Номер запуска нужен, чтобы на графиках истории подписывать точки
       - name: Add run info
         run: |
           cat > allure-results/executor.json <<'EOF'
@@ -135,7 +131,6 @@ jobs:
           path: allure-report
           retention-days: 14
 
-      # Отчёт вместе с новой папкой history публикуется в gh-pages и станет историей для следующего запуска
       - name: Publish report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

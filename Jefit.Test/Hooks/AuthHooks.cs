@@ -3,10 +3,6 @@ using TechTalk.SpecFlow.UnitTestProvider;
 
 namespace Jefit.Test.Hooks;
 
-/// <summary>
-/// Сценарии @auth требуют тестовый аккаунт (а сценарий с API — ещё и пути Account API).
-/// Если они не настроены, сценарий помечается Ignored, а не падает.
-/// </summary>
 [Binding]
 public class AuthHooks
 {
@@ -42,7 +38,6 @@ public class AuthHooks
         }
     }
 
-    /// <summary>Удаляет созданные через API данные, даже если сценарий упал.</summary>
     [AfterScenario("auth")]
     public void DeleteCreatedData()
     {

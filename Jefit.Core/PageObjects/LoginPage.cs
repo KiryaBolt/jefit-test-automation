@@ -4,7 +4,6 @@ using OpenQA.Selenium;
 
 namespace Jefit.Core.PageObjects;
 
-/// <summary>Страница входа https://www.jefit.com/login</summary>
 public class LoginPage : BasePage
 {
     public LoginPage(IWebDriver driver) : base(driver)
@@ -38,7 +37,6 @@ public class LoginPage : BasePage
         SubmitButton.Click();
     }
 
-    /// <summary>Кнопка при пустых полях может быть неактивной — это тоже ожидаемый результат.</summary>
     public void SubmitEmptyForm() => SubmitButton.ClickWithoutWaitingEnabled();
 
     public bool StaysOnLoginPage(int seconds = 5) =>

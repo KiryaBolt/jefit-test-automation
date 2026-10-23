@@ -8,15 +8,10 @@ using OpenQA.Selenium.Remote;
 
 namespace Jefit.Core.Infrastructure;
 
-/// <summary>
-/// Создаёт драйвер нужного браузера: Chrome, Firefox, Edge — локально или в Selenium Grid.
-/// Драйверы скачивает Selenium Manager автоматически.
-/// </summary>
 public static class DriverFactory
 {
     public static IWebDriver CreateDriver(TestSettings settings)
     {
-        // На Linux (Jenkins в Docker, GitHub Actions) браузер всегда запускается без окна
         var headless = settings.IsHeadless || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
         DriverOptions options = settings.BrowserType.ToLower() switch
@@ -56,7 +51,7 @@ public static class DriverFactory
 
         if (!string.IsNullOrWhiteSpace(settings.ChromeBinaryPath))
         {
-            options.BinaryLocation = settings.ChromeBinaryPath; // Chromium в Docker-образе
+            options.BinaryLocation = settings.ChromeBinaryPath;
         }
 
         return options;
@@ -70,7 +65,6 @@ public static class DriverFactory
         return options;
     }
 
-    // Chrome и Edge построены на Chromium, поэтому аргументы у них общие
     private static void AddChromiumArguments(Action<string> addArgument, TestSettings settings, bool headless)
     {
         addArgument(headless ? $"--window-size={settings.WindowWidth},{settings.WindowHeight}" : "--start-maximized");
@@ -80,9 +74,9 @@ public static class DriverFactory
         if (headless)
         {
             addArgument("--headless=new");
-            addArgument("--no-sandbox");            // обязательно для Docker
+            addArgument("--no-sandbox");
             addArgument("--disable-dev-shm-usage");
-            addArgument($"--user-agent={settings.UserAgent}"); // без "HeadlessChrome" в User-Agent
+            addArgument($"--user-agent={settings.UserAgent}");
         }
     }
 

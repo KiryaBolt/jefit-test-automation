@@ -3,7 +3,6 @@ using OpenQA.Selenium;
 
 namespace Jefit.Core.PageObjects;
 
-/// <summary>Главная страница https://www.jefit.com/</summary>
 public class HomePage : BasePage
 {
     public HomePage(IWebDriver driver) : base(driver)

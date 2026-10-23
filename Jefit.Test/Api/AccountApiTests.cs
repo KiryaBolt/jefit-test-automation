@@ -3,9 +3,6 @@ using Allure.NUnit.Attributes;
 
 namespace Jefit.Test.Api;
 
-/// <summary>
-/// Требуют тестовый аккаунт и пути API в appsettings (см. README). Без них тесты помечаются как Ignored.
-/// </summary>
 [TestFixture]
 [Category("auth")]
 [AllureFeature("Account")]

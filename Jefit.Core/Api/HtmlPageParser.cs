@@ -5,7 +5,6 @@ using Jefit.Core.Api.Models;
 
 namespace Jefit.Core.Api;
 
-/// <summary>Разбор HTML-ответов jefit.com с помощью AngleSharp.</summary>
 public static class HtmlPageParser
 {
     public static PageMeta GetMeta(string html)
@@ -44,7 +43,7 @@ public static class HtmlPageParser
             if (!match.Success) continue;
 
             var id = int.Parse(match.Groups[1].Value);
-            if (!seenIds.Add(id)) continue; // у карточки может быть несколько ссылок
+            if (!seenIds.Add(id)) continue;
 
             var slug = match.Groups[2].Value;
             var alt = link.QuerySelector("img[alt]")?.GetAttribute("alt");

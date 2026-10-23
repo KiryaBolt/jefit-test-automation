@@ -4,7 +4,6 @@ namespace Jefit.Core.Infrastructure;
 
 public record UserCredentials(string Email, string Password);
 
-/// <summary>Генерация уникальных тестовых данных (Bogus). Новый Faker на вызов — безопасно для параллельного запуска.</summary>
 public static class TestDataGenerator
 {
     public static UserCredentials GenerateInvalidUser()

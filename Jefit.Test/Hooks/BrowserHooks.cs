@@ -3,10 +3,6 @@ using TechTalk.SpecFlow;
 
 namespace Jefit.Test.Hooks;
 
-/// <summary>
-/// Хуки браузера. Важно: хуки с тегом ("ui") срабатывают только для UI-сценариев.
-/// Хук без тега в любом [Binding]-классе выполняется для ВСЕХ сценариев проекта.
-/// </summary>
 [Binding]
 public class BrowserHooks
 {
@@ -23,7 +19,6 @@ public class BrowserHooks
     public void AddBrowserToReport() =>
         AllureHelper.AddParameter("Browser", ConfigReader.Settings.BrowserType);
 
-    /// <summary>Если шаг упал — скриншот, адрес и HTML страницы прикрепляются к Allure.</summary>
     [AfterStep]
     public void AttachFailureArtifacts()
     {
@@ -38,7 +33,6 @@ public class BrowserHooks
         }
         catch (WebDriverException)
         {
-            // браузер уже недоступен
         }
     }
 

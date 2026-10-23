@@ -2,7 +2,6 @@ using TechTalk.SpecFlow;
 
 namespace Jefit.Test.StepDefinitions;
 
-/// <summary>Общие проверки адреса, title и заголовка — используются во всех UI-фичах.</summary>
 [Binding]
 public class CommonSteps
 {

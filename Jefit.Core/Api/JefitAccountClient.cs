@@ -8,13 +8,6 @@ using RestSharp;
 
 namespace Jefit.Core.Api;
 
-/// <summary>
-/// Клиент авторизованной части Jefit. Эндпоинты найдены в браузере (DevTools и код страницы входа):
-///   POST   /api/v2/auth/login         {platform, username, passwordMd5} -> accessToken + сессионная cookie
-///   POST   /api/v2/routines/download  {routine_id} -> {row_id}: план из каталога добавлен в «Мои планы»
-///   DELETE /api/v2/routines/u_{row_id, 12 цифр}: удалить план пользователя
-/// Сессия держится в httpOnly-cookie, поэтому все запросы идут через общий CookieContainer.
-/// </summary>
 public class JefitAccountClient : BaseApiClient
 {
     public JefitAccountClient() : this(new CookieContainer())
@@ -26,7 +19,6 @@ public class JefitAccountClient : BaseApiClient
         Cookies = cookies;
     }
 
-    /// <summary>Cookie сессии после входа — их можно перенести в браузер.</summary>
     public CookieContainer Cookies { get; }
 
     public string? AccessToken { get; private set; }
@@ -43,7 +35,6 @@ public class JefitAccountClient : BaseApiClient
         return new LoginResult(response, response.IsSuccessful && hasSession);
     }
 
-    /// <summary>Добавляет готовый план из каталога в «Мои планы». Возвращает id плана пользователя для удаления.</summary>
     public async Task<string> AddRoutineFromCatalogAsync(int catalogRoutineId)
     {
         var request = new RestRequest($"{Settings.AccountRoutinesPath.TrimEnd('/')}/download", Method.Post)
@@ -58,7 +49,6 @@ public class JefitAccountClient : BaseApiClient
         var rowId = ReadNumber(response.Body, "row_id")
                     ?? throw new InvalidOperationException("В ответе нет row_id добавленного плана.");
 
-        // Сайт адресует планы пользователя как "u_" + номер, дополненный нулями до 12 цифр
         return $"u_{rowId:D12}";
     }
 
@@ -68,7 +58,6 @@ public class JefitAccountClient : BaseApiClient
     private static string GetBaseUrl() =>
         string.IsNullOrWhiteSpace(Settings.AccountApiBaseUrl) ? Settings.ApiBaseUrl : Settings.AccountApiBaseUrl;
 
-    /// <summary>Сайт хеширует пароль MD5 в браузере перед отправкой; повторяем то же самое.</summary>
     private static string Md5Hex(string value) =>
         Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 

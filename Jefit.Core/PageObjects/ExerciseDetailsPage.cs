@@ -4,7 +4,6 @@ using OpenQA.Selenium;
 
 namespace Jefit.Core.PageObjects;
 
-/// <summary>Страница упражнения /exercises/{id}/{slug}</summary>
 public class ExerciseDetailsPage : BasePage
 {
     public ExerciseDetailsPage(IWebDriver driver) : base(driver)
@@ -19,7 +18,6 @@ public class ExerciseDetailsPage : BasePage
         return new ExerciseDetailsPage(driver);
     }
 
-    /// <summary>Есть ли на странице блок "Equipment", "Instructions" и т.п.</summary>
     public bool HasSection(string title) =>
         new Label(_driver, By.XPath($"//*[normalize-space()={XPathHelper.Literal(title)}]")).IsDisplayed();
 

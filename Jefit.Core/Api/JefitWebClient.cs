@@ -3,10 +3,6 @@ using RestSharp;
 
 namespace Jefit.Core.Api;
 
-/// <summary>
-/// HTTP-клиент для публичной части jefit.com. Сайт рендерится на сервере (Next.js),
-/// поэтому в HTTP-ответе уже есть настоящие данные: упражнения, планы, SEO-теги.
-/// </summary>
 public class JefitWebClient : BaseApiClient
 {
     public JefitWebClient() : base(Settings.ApiBaseUrl)

@@ -7,7 +7,6 @@ using OpenQA.Selenium;
 
 namespace Jefit.Core.PageObjects;
 
-/// <summary>База планов тренировок https://www.jefit.com/routines (и категории /routines/beginner и т.д.)</summary>
 public class RoutinesPage : BasePage
 {
     private static readonly By CardLinks = By.CssSelector("a[href*='/routines/']");
@@ -26,7 +25,6 @@ public class RoutinesPage : BasePage
         return new RoutinesPage(driver);
     }
     
-    /// <summary>Число из надписи "26850 plans". Слово "plans" встречается и в меню, поэтому ищем текст строго вида "N plans".</summary>
     public int GetPlansCount()
     {
         var number = _wait.Until(d =>

@@ -6,7 +6,6 @@ using OpenQA.Selenium;
 
 namespace Jefit.Core.PageObjects;
 
-/// <summary>База упражнений https://www.jefit.com/exercises</summary>
 public class ExercisesPage : BasePage
 {
     private static readonly By CardLinks = By.CssSelector("a[href*='/exercises/']");
@@ -28,7 +27,6 @@ public class ExercisesPage : BasePage
         return new ExercisesPage(driver);
     }
 
-    /// <summary>Число из надписи "1269 EXERCISES FOUND".</summary>
     public int GetFoundExercisesCount() => FoundCounter.GetNumber();
 
     public IReadOnlyList<ExerciseCard> GetExerciseCards() =>
@@ -43,8 +41,6 @@ public class ExercisesPage : BasePage
         var locator = MuscleFilterLocator(muscle);
         var countBefore = GetFoundExercisesCount();
 
-        // Страница показывается раньше, чем JavaScript сайта подключается к кнопкам.
-        // Клик до этого момента ничего не делает, поэтому ждём "оживления" кнопки.
         WaitUntilInteractive(locator);
 
         new Button(_driver, locator).Click();
@@ -70,7 +66,6 @@ public class ExercisesPage : BasePage
 
     protected override void WaitForPageLoad() => EnsureDisplayed(Heading, "База упражнений");
 
-    /// <summary>React добавляет элементу служебные свойства __react..., когда подключает к нему обработчики.</summary>
     private void WaitUntilInteractive(By locator) =>
         WaitUntil(d =>
         {

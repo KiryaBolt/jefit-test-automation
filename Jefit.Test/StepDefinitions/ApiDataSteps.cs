@@ -2,7 +2,6 @@ using TechTalk.SpecFlow;
 
 namespace Jefit.Test.StepDefinitions;
 
-/// <summary>Тестовые данные для UI получаются через API (RestSharp), а не захардкожены.</summary>
 [Binding]
 public class ApiDataSteps : IDisposable
 {
