@@ -1,6 +1,0 @@
-POST https://www.jefit.com/api/v2/auth/login
-Status: 200 OK
-Elapsed: 219 ms
-Content-Type: application/json
-
-{"accessToken": "***","refreshToken": "***"}

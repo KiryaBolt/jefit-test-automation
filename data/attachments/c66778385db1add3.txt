@@ -1,6 +1,0 @@
-POST https://www.jefit.com/api/v2/routines/download
-Status: 200 OK
-Elapsed: 93 ms
-Content-Type: application/json
-
-{"row_id":75409221}

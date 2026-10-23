@@ -1,6 +1,0 @@
-DELETE https://www.jefit.com/api/v2/routines/u_000075409221
-Status: 200 OK
-Elapsed: 83 ms
-Content-Type: application/json
-
-
