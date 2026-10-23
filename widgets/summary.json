@@ -1,1 +1,1 @@
-{"reportName":"Jefit Allure Report","testRuns":[],"statistic":{"failed":0,"broken":0,"skipped":0,"passed":59,"unknown":0,"total":59},"time":{"start":1792743834440,"stop":1792743959628,"duration":125188,"minDuration":138,"maxDuration":34250,"sumDuration":397378}}
+{"reportName":"Jefit Allure Report","testRuns":[],"statistic":{"failed":0,"broken":0,"skipped":0,"passed":59,"unknown":0,"total":59},"time":{"start":1792745066071,"stop":1792745186218,"duration":120147,"minDuration":150,"maxDuration":23584,"sumDuration":374059}}

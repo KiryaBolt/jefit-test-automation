@@ -1,1 +1,1 @@
-[{"values":["https://www.jefit.com/"],"name":"Base.URL"},{"values":["Firefox"],"name":"Browser"},{"values":["True"],"name":"Headless"},{"values":["Ubuntu 24.04.5 LTS"],"name":"OS"},{"values":[".NET 8.0.32"],"name":"Runtime"}]
+[{"values":["https://www.jefit.com/"],"name":"Base.URL"},{"values":["Chrome"],"name":"Browser"},{"values":["True"],"name":"Headless"},{"values":["Ubuntu 24.04.5 LTS"],"name":"OS"},{"values":[".NET 8.0.32"],"name":"Runtime"}]
